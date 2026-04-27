@@ -12,12 +12,12 @@ export function ResultCard({
   isSaved: boolean;
 }) {
   return (
-    <article className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:shadow-md">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+    <article className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-sm transition hover:shadow-md sm:p-6">
+      <div className="flex flex-col gap-4">
         <div className="space-y-3">
           <p className="text-xs font-semibold uppercase tracking-[0.28em] text-slate-400">Name Candidate</p>
           <div>
-            <h3 className="text-2xl font-semibold tracking-tight text-slate-950">{suggestion.name}</h3>
+            <h3 className="text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl">{suggestion.name}</h3>
             {suggestion.reading ? (
               <p className="mt-1 text-sm text-slate-500">{suggestion.reading}</p>
             ) : null}
@@ -26,12 +26,13 @@ export function ResultCard({
             {suggestion.shortEvaluation}
           </div>
         </div>
-        <div className="flex flex-wrap gap-2 sm:justify-end">
+
+        <div className="grid gap-2 sm:grid-cols-3">
           <a
             href={suggestion.googleSearchUrl}
             target="_blank"
             rel="noreferrer"
-            className="rounded-full border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+            className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
           >
             Google検索
           </a>
@@ -39,7 +40,7 @@ export function ResultCard({
             href={suggestion.trademarkSearchUrl}
             target="_blank"
             rel="noreferrer"
-            className="rounded-full border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+            className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
           >
             商標確認
           </a>
@@ -47,7 +48,7 @@ export function ResultCard({
             <button
               type="button"
               onClick={onUnsave}
-              className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-700"
+              className="min-h-11 rounded-2xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-700"
             >
               保存解除
             </button>
@@ -55,7 +56,7 @@ export function ResultCard({
             <button
               type="button"
               onClick={onSave}
-              className="rounded-full bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-500"
+              className="min-h-11 rounded-2xl bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-500"
             >
               保存する
             </button>
@@ -63,7 +64,7 @@ export function ResultCard({
         </div>
       </div>
 
-      <div className="mt-6 grid gap-4 lg:grid-cols-3">
+      <div className="mt-5 grid gap-4 lg:grid-cols-3">
         <section className="rounded-2xl bg-slate-50 p-4">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">由来・意味</p>
           <p className="mt-2 text-sm leading-7 text-slate-700">{suggestion.originMeaning}</p>

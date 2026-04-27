@@ -98,31 +98,37 @@ export function GeneratorApp() {
   }
 
   return (
-    <div className="min-h-screen bg-[linear-gradient(180deg,#f8fafc_0%,#eef2f7_100%)]">
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        <header className="mb-8 rounded-[32px] border border-white/60 bg-white/90 p-6 shadow-xl shadow-slate-200/60 backdrop-blur">
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+    <div className="min-h-screen bg-[linear-gradient(180deg,#f8fafc_0%,#eef2f7_48%,#f8fafc_100%)] pb-12">
+      <div className="mx-auto max-w-6xl px-4 py-5 sm:px-6 sm:py-8 lg:px-8">
+        <header className="mb-5 rounded-[28px] border border-white/70 bg-white/92 p-5 shadow-xl shadow-slate-200/60 backdrop-blur sm:mb-8 sm:p-8">
+          <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-3xl space-y-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.32em] text-slate-500">
-                Mansion Name Generator Pro
-              </p>
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="rounded-full bg-emerald-50 px-3 py-1 text-[11px] font-semibold tracking-[0.22em] text-emerald-700 uppercase">
+                  Mansion Name Generator Pro
+                </span>
+                <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-medium text-slate-600">
+                  株式会社宮永不動産 制作
+                </span>
+              </div>
               <div className="space-y-3">
-                <h1 className="text-3xl font-semibold tracking-tight text-slate-950 sm:text-5xl">
+                <h1 className="text-2xl font-semibold tracking-tight text-slate-950 sm:text-4xl lg:text-5xl">
                   物件の世界観から、
-                  <span className="text-emerald-700">由来のある斬新なネーミング</span>を設計する
+                  <span className="text-emerald-700">由来のある斬新なネーミング</span>
+                  を設計する
                 </h1>
                 <p className="max-w-3xl text-sm leading-7 text-slate-600 sm:text-base">
                   投資用一棟アパート・マンション向け。よくある語尾の量産ではなく、コンセプトと居住者像から由来を設計し、提案資料にそのまま載せられる候補を10案生成します。
                 </p>
               </div>
             </div>
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="grid w-full gap-3 sm:grid-cols-2 lg:w-auto lg:min-w-[320px]">
               <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
                 保存済み <span className="font-semibold text-slate-950">{savedRecords.length}</span> 件
               </div>
               <Link
                 href="/saved"
-                className="rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-700"
+                className="inline-flex min-h-12 items-center justify-center rounded-2xl border border-emerald-600 bg-emerald-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-600/20 transition hover:bg-emerald-500 active:scale-[0.99]"
               >
                 保存一覧を見る
               </Link>
@@ -130,12 +136,12 @@ export function GeneratorApp() {
           </div>
         </header>
 
-        <div className="grid gap-8 xl:grid-cols-[420px_minmax(0,1fr)]">
-          <section className="rounded-[32px] border border-white/60 bg-white/90 p-6 shadow-xl shadow-slate-200/60 backdrop-blur">
+        <div className="grid gap-5 lg:gap-8 xl:grid-cols-[400px_minmax(0,1fr)]">
+          <section className="rounded-[28px] border border-white/70 bg-white/92 p-5 shadow-xl shadow-slate-200/60 backdrop-blur sm:p-6">
             <div className="mb-6 space-y-2">
-              <h2 className="text-xl font-semibold text-slate-950">基本入力フォーム</h2>
+              <h2 className="text-lg font-semibold text-slate-950 sm:text-xl">基本入力フォーム</h2>
               <p className="text-sm leading-6 text-slate-500">
-                入力は少なく、出力は濃く。まずはコンセプトの芯だけ決めれば十分です。
+                スマホでも使いやすいよう、入力は少なく絞っています。まずは世界観の芯だけ決めれば十分です。
               </p>
             </div>
 
@@ -145,7 +151,7 @@ export function GeneratorApp() {
                   value={input.area}
                   onChange={(event) => updateField("area", event.target.value)}
                   placeholder="例：福井市中央、渋谷区代官山、京都市左京区"
-                  className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-slate-400"
+                  className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3.5 text-base text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-500"
                 />
               </FormField>
 
@@ -160,7 +166,7 @@ export function GeneratorApp() {
                     value={input.propertyTypeOther || ""}
                     onChange={(event) => updateField("propertyTypeOther", event.target.value)}
                     placeholder="例：別荘、ヴィラ型賃貸、テラスハウス"
-                    className="mt-3 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-slate-400"
+                    className="mt-3 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3.5 text-base text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-500"
                   />
                 ) : null}
               </FormField>
@@ -176,7 +182,7 @@ export function GeneratorApp() {
                     value={input.worldConceptOther || ""}
                     onChange={(event) => updateField("worldConceptOther", event.target.value)}
                     placeholder="例：北欧、ホテルライク、クラシック"
-                    className="mt-3 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-slate-400"
+                    className="mt-3 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3.5 text-base text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-500"
                   />
                 ) : null}
               </FormField>
@@ -192,7 +198,7 @@ export function GeneratorApp() {
                     value={input.residentImageOther || ""}
                     onChange={(event) => updateField("residentImageOther", event.target.value)}
                     placeholder="例：二拠点生活者、クリエイター層"
-                    className="mt-3 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-slate-400"
+                    className="mt-3 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3.5 text-base text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-500"
                   />
                 ) : null}
               </FormField>
@@ -207,7 +213,7 @@ export function GeneratorApp() {
                   onChange={(event) => updateField("freeKeywords", event.target.value)}
                   placeholder="例：駅近、再開発、洗練、ホテルライク"
                   rows={4}
-                  className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-slate-400"
+                  className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3.5 text-base text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-500"
                 />
               </FormField>
 
@@ -215,8 +221,8 @@ export function GeneratorApp() {
                 type="submit"
                 disabled={loading}
                 className={cn(
-                  "w-full rounded-full px-5 py-4 text-sm font-semibold text-white transition",
-                  loading ? "bg-slate-400" : "bg-emerald-600 hover:bg-emerald-500",
+                  "w-full rounded-2xl px-5 py-4 text-base font-semibold text-white shadow-lg transition active:scale-[0.99]",
+                  loading ? "bg-slate-400 shadow-slate-300" : "bg-emerald-600 shadow-emerald-600/25 hover:bg-emerald-500",
                 )}
               >
                 {loading ? "候補を生成中..." : "ネーミング案を10件生成する"}
@@ -226,11 +232,11 @@ export function GeneratorApp() {
             </form>
           </section>
 
-          <section className="space-y-6">
-            <div className="rounded-[32px] border border-white/60 bg-white/90 p-6 shadow-xl shadow-slate-200/60 backdrop-blur">
+          <section className="space-y-5 sm:space-y-6">
+            <div className="rounded-[28px] border border-white/70 bg-white/92 p-5 shadow-xl shadow-slate-200/60 backdrop-blur sm:p-6">
               <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                 <div>
-                  <h2 className="text-xl font-semibold text-slate-950">生成結果</h2>
+                  <h2 className="text-lg font-semibold text-slate-950 sm:text-xl">生成結果</h2>
                   <p className="mt-2 text-sm leading-6 text-slate-500">
                     由来設計 → 命名 → 実務コメントまで一気に出します。雑な語尾量産は、ここでは採用しません。
                   </p>
@@ -244,12 +250,12 @@ export function GeneratorApp() {
             </div>
 
             {!result ? (
-              <div className="rounded-[32px] border border-dashed border-slate-300 bg-white/70 p-10 text-center text-sm leading-7 text-slate-500 shadow-lg shadow-slate-200/40">
-                まだ候補は生成されていません。左のフォームから条件を入れて、まずは一回まわしましょう。
+              <div className="rounded-[28px] border border-dashed border-slate-300 bg-white/75 p-8 text-center text-sm leading-7 text-slate-500 shadow-lg shadow-slate-200/40 sm:p-10">
+                まだ候補は生成されていません。上のフォームから条件を入れて、まずは一回まわしましょう。
                 たいてい、考え込むより叩き台を出した方が早いです。
               </div>
             ) : (
-              <div className="space-y-5">
+              <div className="space-y-4 sm:space-y-5">
                 {result.suggestions.map((suggestion) => {
                   const isSaved = savedNames.has(suggestion.name);
                   return (
@@ -266,9 +272,9 @@ export function GeneratorApp() {
             )}
 
             {result ? (
-              <div className="rounded-[32px] border border-slate-200 bg-slate-950 p-6 text-slate-50 shadow-xl shadow-slate-900/10">
+              <div className="rounded-[28px] border border-slate-200 bg-slate-950 p-5 text-slate-50 shadow-xl shadow-slate-900/10 sm:p-6">
                 <p className="text-xs font-semibold uppercase tracking-[0.32em] text-slate-400">Current Input Snapshot</p>
-                <dl className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                <dl className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
                   {Object.entries(normalizeInput(result.input)).map(([key, value]) => (
                     <div key={key} className="rounded-2xl bg-white/5 p-4">
                       <dt className="text-xs uppercase tracking-[0.2em] text-slate-400">{key}</dt>
@@ -280,6 +286,13 @@ export function GeneratorApp() {
             ) : null}
           </section>
         </div>
+
+        <footer className="mt-6 rounded-[24px] border border-white/70 bg-white/88 px-5 py-4 text-sm text-slate-600 shadow-lg shadow-slate-200/50 backdrop-blur sm:mt-8 sm:px-6">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <p className="font-medium text-slate-800">株式会社宮永不動産</p>
+            <p>本アプリは実務での物件ネーミング検討を想定したモバイルファーストUIです。</p>
+          </div>
+        </footer>
       </div>
     </div>
   );

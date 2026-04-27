@@ -34,22 +34,31 @@ export function SavedPageClient() {
   }
 
   return (
-    <div className="min-h-screen bg-[linear-gradient(180deg,#f8fafc_0%,#eef2f7_100%)]">
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        <header className="mb-8 rounded-[32px] border border-white/60 bg-white/90 p-6 shadow-xl shadow-slate-200/60 backdrop-blur">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.32em] text-slate-500">Saved Records</p>
-              <h1 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">
-                保存済みネーミング一覧
-              </h1>
-              <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">
-                各案の保存時点の入力条件と、その回で生成した候補全体を残しています。比較の文脈まで残すのが、このアプリの実務寄りなところです。
-              </p>
+    <div className="min-h-screen bg-[linear-gradient(180deg,#f8fafc_0%,#eef2f7_48%,#f8fafc_100%)] pb-12">
+      <div className="mx-auto max-w-6xl px-4 py-5 sm:px-6 sm:py-8 lg:px-8">
+        <header className="mb-5 rounded-[28px] border border-white/70 bg-white/92 p-5 shadow-xl shadow-slate-200/60 backdrop-blur sm:mb-8 sm:p-8">
+          <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+            <div className="space-y-3">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="rounded-full bg-emerald-50 px-3 py-1 text-[11px] font-semibold tracking-[0.22em] text-emerald-700 uppercase">
+                  Saved Records
+                </span>
+                <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-medium text-slate-600">
+                  株式会社宮永不動産 制作
+                </span>
+              </div>
+              <div>
+                <h1 className="text-2xl font-semibold tracking-tight text-slate-950 sm:text-4xl">
+                  保存済みネーミング一覧
+                </h1>
+                <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">
+                  各案の保存時点の入力条件と、その回で生成した候補全体を残しています。比較の文脈まで残すのが、このアプリの実務寄りなところです。
+                </p>
+              </div>
             </div>
             <Link
               href="/"
-              className="inline-flex rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-700"
+              className="inline-flex min-h-12 items-center justify-center rounded-2xl border border-emerald-600 bg-emerald-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-600/20 transition hover:bg-emerald-500"
             >
               生成画面に戻る
             </Link>
@@ -57,12 +66,12 @@ export function SavedPageClient() {
         </header>
 
         {records.length === 0 ? (
-          <div className="rounded-[32px] border border-dashed border-slate-300 bg-white/70 p-10 text-center text-sm leading-7 text-slate-500 shadow-lg shadow-slate-200/40">
+          <div className="rounded-[28px] border border-dashed border-slate-300 bg-white/75 p-8 text-center text-sm leading-7 text-slate-500 shadow-lg shadow-slate-200/40 sm:p-10">
             まだ保存データはありません。まずは生成画面で候補を作り、気になる案を保存してください。
           </div>
         ) : (
-          <div className="grid gap-8 xl:grid-cols-[340px_minmax(0,1fr)]">
-            <aside className="rounded-[32px] border border-white/60 bg-white/90 p-4 shadow-xl shadow-slate-200/60 backdrop-blur">
+          <div className="grid gap-5 lg:gap-8 xl:grid-cols-[320px_minmax(0,1fr)]">
+            <aside className="rounded-[28px] border border-white/70 bg-white/92 p-4 shadow-xl shadow-slate-200/60 backdrop-blur">
               <div className="mb-3 px-2 pt-2 text-sm font-semibold text-slate-900">保存済み {records.length}件</div>
               <div className="space-y-3">
                 {records.map((record) => {
@@ -94,12 +103,12 @@ export function SavedPageClient() {
             </aside>
 
             {selectedRecord ? (
-              <section className="space-y-6">
-                <article className="rounded-[32px] border border-white/60 bg-white/90 p-6 shadow-xl shadow-slate-200/60 backdrop-blur">
+              <section className="space-y-5 sm:space-y-6">
+                <article className="rounded-[28px] border border-white/70 bg-white/92 p-5 shadow-xl shadow-slate-200/60 backdrop-blur sm:p-6">
                   <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                     <div>
                       <p className="text-xs font-semibold uppercase tracking-[0.28em] text-slate-400">Selected Name</p>
-                      <h2 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950">
+                      <h2 className="mt-3 text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl">
                         {selectedRecord.selectedSuggestion.name}
                       </h2>
                       {selectedRecord.selectedSuggestion.reading ? (
@@ -108,12 +117,12 @@ export function SavedPageClient() {
                         </p>
                       ) : null}
                     </div>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="grid w-full gap-2 sm:grid-cols-3 lg:w-auto">
                       <a
                         href={selectedRecord.selectedSuggestion.googleSearchUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="rounded-full border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                        className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
                       >
                         Google検索
                       </a>
@@ -121,21 +130,21 @@ export function SavedPageClient() {
                         href={selectedRecord.selectedSuggestion.trademarkSearchUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="rounded-full border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                        className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
                       >
                         商標確認
                       </a>
                       <button
                         type="button"
                         onClick={() => handleRemove(selectedRecord.savedId)}
-                        className="rounded-full bg-rose-600 px-4 py-2 text-sm font-semibold text-white hover:bg-rose-500"
+                        className="min-h-11 rounded-2xl bg-rose-600 px-4 py-2 text-sm font-semibold text-white hover:bg-rose-500"
                       >
                         削除
                       </button>
                     </div>
                   </div>
 
-                  <div className="mt-6 grid gap-4 lg:grid-cols-3">
+                  <div className="mt-5 grid gap-4 lg:grid-cols-3">
                     <section className="rounded-2xl bg-slate-50 p-4">
                       <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">由来・意味</p>
                       <p className="mt-2 text-sm leading-7 text-slate-700">
@@ -157,9 +166,9 @@ export function SavedPageClient() {
                   </div>
                 </article>
 
-                <article className="rounded-[32px] border border-slate-200 bg-slate-950 p-6 text-white shadow-xl shadow-slate-900/10">
+                <article className="rounded-[28px] border border-slate-200 bg-slate-950 p-5 text-white shadow-xl shadow-slate-900/10 sm:p-6">
                   <p className="text-xs font-semibold uppercase tracking-[0.32em] text-slate-400">Saved Input Snapshot</p>
-                  <dl className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                  <dl className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
                     {Object.entries(normalizeInput(selectedRecord.input)).map(([key, value]) => (
                       <div key={key} className="rounded-2xl bg-white/5 p-4">
                         <dt className="text-xs uppercase tracking-[0.2em] text-slate-400">{key}</dt>
@@ -169,10 +178,10 @@ export function SavedPageClient() {
                   </dl>
                 </article>
 
-                <article className="rounded-[32px] border border-white/60 bg-white/90 p-6 shadow-xl shadow-slate-200/60 backdrop-blur">
-                  <div className="flex items-center justify-between gap-4">
+                <article className="rounded-[28px] border border-white/70 bg-white/92 p-5 shadow-xl shadow-slate-200/60 backdrop-blur sm:p-6">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <div>
-                      <h3 className="text-xl font-semibold text-slate-950">同時に生成された候補一覧</h3>
+                      <h3 className="text-lg font-semibold text-slate-950 sm:text-xl">同時に生成された候補一覧</h3>
                       <p className="mt-2 text-sm leading-6 text-slate-500">
                         保存した案だけでなく、比較対象だった候補も見返せます。
                       </p>
@@ -181,7 +190,7 @@ export function SavedPageClient() {
                       {selectedRecord.allSuggestions.length}件
                     </div>
                   </div>
-                  <div className="mt-6 grid gap-4 lg:grid-cols-2">
+                  <div className="mt-5 grid gap-4 lg:grid-cols-2">
                     {selectedRecord.allSuggestions.map((suggestion) => {
                       const selected = suggestion.id === selectedRecord.selectedSuggestionId;
                       return (
@@ -213,6 +222,13 @@ export function SavedPageClient() {
             ) : null}
           </div>
         )}
+
+        <footer className="mt-6 rounded-[24px] border border-white/70 bg-white/88 px-5 py-4 text-sm text-slate-600 shadow-lg shadow-slate-200/50 backdrop-blur sm:mt-8 sm:px-6">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <p className="font-medium text-slate-800">株式会社宮永不動産</p>
+            <p>保存済み候補の比較・確認もスマホで見やすいUIに調整しています。</p>
+          </div>
+        </footer>
       </div>
     </div>
   );
