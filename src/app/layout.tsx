@@ -16,6 +16,7 @@ export const metadata: Metadata = {
   title: "マンション名ジェネレーター Pro",
   description:
     "投資用一棟アパート・マンション向けに、由来のある斬新なネーミング候補を生成する実務特化アプリ。",
+  applicationName: "マンション名ジェネレーター Pro",
   icons: {
     icon: "/icon.svg",
   },
