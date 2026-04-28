@@ -1,5 +1,10 @@
 import { NameSuggestion, NormalizedGeneratorInput } from "@/lib/types";
-import { buildGoogleSearchUrl, buildTrademarkSearchUrl, makeId } from "@/lib/utils";
+import {
+  buildGoogleSearchUrl,
+  buildKatakanaReading,
+  buildTrademarkSearchUrl,
+  makeId,
+} from "@/lib/utils";
 
 const schema = {
   name: "mansion_name_generator_pro",
@@ -9,7 +14,7 @@ const schema = {
     properties: {
       suggestions: {
         type: "array",
-        minItems: 8,
+        minItems: 10,
         maxItems: 10,
         items: {
           type: "object",
@@ -24,6 +29,7 @@ const schema = {
           },
           required: [
             "name",
+            "reading",
             "originMeaning",
             "impressionTone",
             "residentFitComment",
@@ -37,11 +43,23 @@ const schema = {
   strict: true,
 };
 
+const languageMarkers = [
+  "英語",
+  "フランス語",
+  "ドイツ語",
+  "ラテン語",
+  "イタリア語",
+  "スペイン語",
+  "日本語",
+];
+
+const processMarkers = ["造語", "短縮", "変形", "接続", "融合", "省略", "丸め", "反転"];
+
 function buildPrompt(input: NormalizedGeneratorInput) {
-  return `あなたは日本の不動産実務に強いネーミングディレクターです。
+  return `あなたは日本語ネーミングに強い命名ディレクターです。
 
 目的:
-投資用一棟アパート・マンション向けに、提案資料でも使える品格を持ちながら、凡庸ではない物件名候補を10案作ってください。
+投資用一棟アパート・マンション向けに、提案資料でそのまま説明できるレベルのネーミング候補を10案作ること。
 
 入力条件:
 - エリア: ${input.area}
@@ -50,23 +68,81 @@ function buildPrompt(input: NormalizedGeneratorInput) {
 - 居住者イメージ: ${input.residentImageLabel}
 - 自由キーワード: ${input.freeKeywords || "なし"}
 
-必須ルール:
-- 名前は日本の賃貸・投資用物件として違和感がないこと
-- ただし、よくあるハイツ、コート、レジデンス等の凡庸な接尾辞の量産は避けること
-- 由来設計を先に行い、その由来に沿った命名をすること
-- 造語・準造語・和洋ミックスを許容する
-- 読みにくすぎる案、痛すぎる案、安っぽい案は避けること
-- 世界観コンセプトと居住者イメージが名前の響きに反映されていること
-- 提案資料に載せても恥ずかしくないこと
-- 各案はできるだけ被らない方向性にすること
-- readingは不要なら空文字でよい
+最重要ルール:
+- 10案すべて方向性を大きく変える
+- 同じ語尾・同じリズム・同じ発想の焼き直しは禁止
+- 先に語源設計を行い、その根拠から名前を作る
+- 安っぽい量産接尾辞の連打は禁止
+- 提案先に説明したとき「なぜその名前なのか」が一読で伝わること
+- reading は必ず全角カタカナのみで返すこと
+
+originMeaning の必須要件:
+- 必ず「何語の何という単語か」を書く
+- 必ず「その単語の直訳」を書く
+- 必ず「どの部分を短縮・変形・接続・融合したか」を書く
+- 必ず「なぜその語源がこの物件条件に合うか」を書く
+- 必ず「造語」という語を本文内に入れる
+- 曖昧な表現だけで終わらせない
+
+10案の内部設計スロット:
+1. フランス語またはイタリア語起点の上品系
+2. ラテン語起点の短縮造語系
+3. ドイツ語または英語起点の都市的で締まった系
+4. 日本語起点の簡潔で余韻のある系
+5. 英語と日本語の和洋ミックス系
+6. 二語融合だが語尾を丸めたソフト造語系
+7. 直球単語名ではなく意味を圧縮した抽象系
+8. 居住者像を先に立てる逆順発想系
+9. 自由キーワードを反映した意味接続系
+10. 高級感よりも思想や設計意図が立つ説明系
 
 出力要件:
-- suggestions を10件返す
+- suggestions をちょうど10件返す
 - 各案ごとに name, reading, originMeaning, impressionTone, residentFitComment, shortEvaluation を返す
-- shortEvaluation は 25文字前後の短評にする
+- originMeaning は2〜4文で、語源・直訳・造語工程・適合理由をすべて含める
+- shortEvaluation は25文字前後で短く鋭くまとめる
 - 日本語中心で自然に書く
-- JSON以外を一切返さない`;
+- JSON以外は一切返さない`;
+}
+
+function normalizeNameKey(name: string) {
+  return name.toLowerCase().replace(/[\s・･・\-ー_]/g, "");
+}
+
+function validateAiOutput(items: Array<{
+  name: string;
+  reading: string;
+  originMeaning: string;
+}>) {
+  if (items.length !== 10) return false;
+
+  const uniqueNames = new Set(items.map((item) => normalizeNameKey(item.name)));
+  if (uniqueNames.size !== 10) return false;
+
+  const uniquePrefixes = new Set(
+    items.map((item) => normalizeNameKey(item.name).slice(0, 4)).filter(Boolean),
+  );
+  if (uniquePrefixes.size < 7) return false;
+
+  const mentionedLanguages = new Set<string>();
+
+  for (const item of items) {
+    if (!item.name.trim()) return false;
+    if (!item.originMeaning.includes("直訳")) return false;
+    if (!item.originMeaning.includes("造語")) return false;
+    if (!processMarkers.some((marker) => item.originMeaning.includes(marker))) return false;
+
+    const normalizedReading = buildKatakanaReading(item.name, item.reading);
+    if (!normalizedReading || /[^ァ-ヶー・\sヴ]/.test(normalizedReading)) return false;
+
+    languageMarkers.forEach((marker) => {
+      if (item.originMeaning.includes(marker)) {
+        mentionedLanguages.add(marker);
+      }
+    });
+  }
+
+  return mentionedLanguages.size >= 4;
 }
 
 export async function generateAiSuggestions(
@@ -83,12 +159,12 @@ export async function generateAiSuggestions(
     },
     body: JSON.stringify({
       model: process.env.OPENAI_MODEL || "gpt-4.1-mini",
-      temperature: 0.9,
+      temperature: 1.05,
       messages: [
         {
           role: "system",
           content:
-            "あなたは日本の不動産実務とネーミングに精通したアシスタントです。出力は必ずJSONスキーマに厳密準拠してください。",
+            "あなたは日本語ネーミングの品質管理者でもあります。出力前に10案を自己点検し、語源の言語・直訳・造語工程・適合理由の4点が揃っているか確認してください。似た語感の案は捨て、差異が明瞭な10案だけをJSONで返してください。",
         },
         {
           role: "user",
@@ -121,7 +197,7 @@ export async function generateAiSuggestions(
   const parsed = JSON.parse(content) as {
     suggestions: Array<{
       name: string;
-      reading?: string;
+      reading: string;
       originMeaning: string;
       impressionTone: string;
       residentFitComment: string;
@@ -129,15 +205,22 @@ export async function generateAiSuggestions(
     }>;
   };
 
-  return parsed.suggestions.map((item) => ({
-    id: makeId("suggestion"),
-    name: item.name.trim(),
-    reading: item.reading?.trim() || undefined,
-    originMeaning: item.originMeaning.trim(),
-    impressionTone: item.impressionTone.trim(),
-    residentFitComment: item.residentFitComment.trim(),
-    shortEvaluation: item.shortEvaluation.trim(),
-    googleSearchUrl: buildGoogleSearchUrl(item.name.trim()),
-    trademarkSearchUrl: buildTrademarkSearchUrl(),
-  }));
+  if (!validateAiOutput(parsed.suggestions)) {
+    throw new Error("AI quality validation failed");
+  }
+
+  return parsed.suggestions.map((item) => {
+    const name = item.name.trim();
+    return {
+      id: makeId("suggestion"),
+      name,
+      reading: buildKatakanaReading(name, item.reading),
+      originMeaning: item.originMeaning.trim(),
+      impressionTone: item.impressionTone.trim(),
+      residentFitComment: item.residentFitComment.trim(),
+      shortEvaluation: item.shortEvaluation.trim(),
+      googleSearchUrl: buildGoogleSearchUrl(name),
+      trademarkSearchUrl: buildTrademarkSearchUrl(),
+    };
+  });
 }

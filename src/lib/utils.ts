@@ -186,6 +186,10 @@ function hiraganaToKatakana(text: string) {
   return text.replace(/[ぁ-ゖ]/g, (char) => String.fromCharCode(char.charCodeAt(0) + 0x60));
 }
 
+function stripDiacritics(text: string) {
+  return text.normalize("NFKD").replace(/[\u0300-\u036f]/g, "");
+}
+
 function basicRomanToKatakana(input: string) {
   const lower = input.toLowerCase();
   let rest = lower;
@@ -221,7 +225,8 @@ function keepKatakanaOnly(text: string) {
 }
 
 function normalizeReadingCandidate(text: string) {
-  const converted = hiraganaToKatakana(text)
+  const normalizedSource = stripDiacritics(text).replace(/[・･/]/g, " ");
+  const converted = hiraganaToKatakana(normalizedSource)
     .replace(/[A-Za-z][A-Za-z' -]*/g, (token) => basicRomanToKatakana(token));
   const replaced = replaceJapaneseCharacters(converted);
   return keepKatakanaOnly(replaced);

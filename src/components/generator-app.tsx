@@ -11,7 +11,15 @@ import {
   residentImageOptions,
   worldConceptOptions,
 } from "@/lib/constants";
-import { getSavedRecords, removeSavedRecord, upsertSavedRecord } from "@/lib/storage";
+import {
+  getDraftInput,
+  getLastResult,
+  getSavedRecords,
+  removeSavedRecord,
+  saveDraftInput,
+  saveLastResult,
+  upsertSavedRecord,
+} from "@/lib/storage";
 import { GeneratorInput, GenerationResult, SavedNameRecord } from "@/lib/types";
 import { cn, formatDateTime, makeId, normalizeInput } from "@/lib/utils";
 import { validateInput, ValidationErrors } from "@/lib/validation";
@@ -23,14 +31,28 @@ export function GeneratorApp() {
   const [savedRecords, setSavedRecords] = useState<SavedNameRecord[]>([]);
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
+  const [hasHydrated, setHasHydrated] = useState(false);
 
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
+      setInput(getDraftInput());
+      setResult(getLastResult());
       setSavedRecords(getSavedRecords());
+      setHasHydrated(true);
     });
 
     return () => window.cancelAnimationFrame(frame);
   }, []);
+
+  useEffect(() => {
+    if (!hasHydrated) return;
+    saveDraftInput(input);
+  }, [input, hasHydrated]);
+
+  useEffect(() => {
+    if (!hasHydrated) return;
+    saveLastResult(result);
+  }, [result, hasHydrated]);
 
   const savedNames = useMemo(
     () => new Set(savedRecords.map((record) => record.selectedSuggestion.name)),
@@ -141,7 +163,7 @@ export function GeneratorApp() {
             <div className="mb-6 space-y-2">
               <h2 className="text-lg font-semibold text-slate-950 sm:text-xl">基本入力フォーム</h2>
               <p className="text-sm leading-6 text-slate-500">
-                スマホでも使いやすいよう、入力は少なく絞っています。まずは世界観の芯だけ決めれば十分です。
+                入力内容と直前の生成結果は、この端末に自動保存されます。画面を移動して戻っても続きから確認できます。
               </p>
             </div>
 
@@ -238,7 +260,7 @@ export function GeneratorApp() {
                 <div>
                   <h2 className="text-lg font-semibold text-slate-950 sm:text-xl">生成結果</h2>
                   <p className="mt-2 text-sm leading-6 text-slate-500">
-                    由来設計 → 命名 → 実務コメントまで一気に出します。雑な語尾量産は、ここでは採用しません。
+                    建物名の下にはカタカナの読みを表示します。読みまで残るので、提案や社内共有でも扱いやすくなります。
                   </p>
                 </div>
                 {result ? (

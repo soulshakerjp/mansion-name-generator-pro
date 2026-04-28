@@ -19,7 +19,9 @@ export function ResultCard({
           <div>
             <h3 className="text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl">{suggestion.name}</h3>
             {suggestion.reading ? (
-              <p className="mt-1 text-sm text-slate-500">{suggestion.reading}</p>
+              <p className="mt-2 text-sm font-medium tracking-[0.12em] text-slate-500 sm:text-base">
+                {suggestion.reading}
+              </p>
             ) : null}
           </div>
           <div className="inline-flex rounded-full bg-amber-50 px-3 py-1 text-sm font-medium text-amber-800">
