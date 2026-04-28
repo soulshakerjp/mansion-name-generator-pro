@@ -89,6 +89,11 @@ export function SavedPageClient() {
                     >
                       <div className="space-y-2">
                         <div className="text-lg font-semibold tracking-tight">{record.selectedSuggestion.name}</div>
+                        {record.selectedSuggestion.reading ? (
+                          <div className={`text-xs tracking-[0.12em] ${active ? "text-slate-300" : "text-slate-500"}`}>
+                            {record.selectedSuggestion.reading}
+                          </div>
+                        ) : null}
                         <div className={`text-xs ${active ? "text-slate-300" : "text-slate-500"}`}>
                           {formatDateTime(record.savedAt)}
                         </div>
@@ -112,7 +117,7 @@ export function SavedPageClient() {
                         {selectedRecord.selectedSuggestion.name}
                       </h2>
                       {selectedRecord.selectedSuggestion.reading ? (
-                        <p className="mt-2 text-sm text-slate-500">
+                        <p className="mt-2 text-sm font-medium tracking-[0.12em] text-slate-500 sm:text-base">
                           {selectedRecord.selectedSuggestion.reading}
                         </p>
                       ) : null}
@@ -205,6 +210,11 @@ export function SavedPageClient() {
                           <div className="flex items-start justify-between gap-3">
                             <div>
                               <h4 className="text-lg font-semibold text-slate-950">{suggestion.name}</h4>
+                              {suggestion.reading ? (
+                                <p className="mt-1 text-xs font-medium tracking-[0.12em] text-slate-500">
+                                  {suggestion.reading}
+                                </p>
+                              ) : null}
                               <p className="mt-2 text-sm text-slate-600">{suggestion.shortEvaluation}</p>
                             </div>
                             {selected ? (
@@ -222,13 +232,6 @@ export function SavedPageClient() {
             ) : null}
           </div>
         )}
-
-        <footer className="mt-6 rounded-[24px] border border-white/70 bg-white/88 px-5 py-4 text-sm text-slate-600 shadow-lg shadow-slate-200/50 backdrop-blur sm:mt-8 sm:px-6">
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-            <p className="font-medium text-slate-800">株式会社宮永不動産</p>
-            <p>保存済み候補の比較・確認もスマホで見やすいUIに調整しています。</p>
-          </div>
-        </footer>
       </div>
     </div>
   );
