@@ -69,7 +69,7 @@ export function ResultCard({
       <div className="mt-5 grid gap-4 lg:grid-cols-3">
         <section className="rounded-2xl bg-slate-50 p-4">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">由来・意味</p>
-          <p className="mt-2 text-sm leading-7 text-slate-700">{suggestion.originMeaning}</p>
+          <p className="mt-2 whitespace-pre-line text-sm leading-7 text-slate-700">{suggestion.originMeaning}</p>
         </section>
         <section className="rounded-2xl bg-slate-50 p-4">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">印象・トーン</p>

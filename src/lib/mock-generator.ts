@@ -215,14 +215,20 @@ function keywordHook(input: NormalizedGeneratorInput) {
 }
 
 function buildOriginMeaning(input: NormalizedGeneratorInput, built: BuiltName) {
-  const sourceText = built.sources
-    .map((source) => `${source.language}の「${source.word}」（直訳: ${source.meaning}）`)
-    .join("と、");
-  const closerText = built.closer
-    ? `さらに日本語の「${built.closer.stem}」（意味: ${built.closer.meaning}）を添え、`
-    : "";
+  const primary = built.sources[0];
+  const secondary = built.sources[1];
+  const secondaryLine = secondary
+    ? `補助語源: ${secondary.language}の「${secondary.word}」= 直訳: ${secondary.meaning}。名前に重ねたのは${secondary.meaning}という意味の芯です。`
+    : built.closer
+      ? `補助語源: 日本語の「${built.closer.stem}」= 直訳: ${built.closer.meaning}。外来語だけで浮かないよう、日本語の住まい語感を足しています。`
+      : "補助語源: 入力条件に沿う補助語を置かず、主要語源の意味を前面に出しています。";
 
-  return `${sourceText}を語源に採用しました。${closerText}${built.process}ことで造語化しています。${input.worldConceptLabel}の世界観と${input.residentImageLabel}の居住者像を同時に説明でき、エリア「${input.area}」での訴求でも意味づけしやすい構成です。${keywordHook(input)}`;
+  return [
+    `主要語源: ${primary.language}の「${primary.word}」= 直訳: ${primary.meaning}。この語の意味合いを名前の核に置いています。`,
+    secondaryLine,
+    `造語処理: ${built.process}ことで造語化し、表記は「${built.name}」、読みは「${built.reading}」に整えました。`,
+    `採用理由: ${input.worldConceptLabel}の世界観と${input.residentImageLabel}の居住者像を同時に説明しやすく、エリア「${input.area}」での訴求にも意味づけしやすい構成です。${keywordHook(input)}`,
+  ].join("\n");
 }
 
 function buildStrategies(index: number, input: NormalizedGeneratorInput): BuiltName {
